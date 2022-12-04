@@ -28,9 +28,9 @@ export class App extends Component {
     this.setState({ filter: value.trim().toLowerCase() });
     const filteredContacts = this.state.contacts.filter(contact => {
       const normalizedName = contact.name.toLowerCase();
-      normalizedName.includes(this.state.filter);
-    }
-    );
+      const filter = normalizedName.includes(this.state.filter);
+      return filter;
+    });
     console.log('App   filteredContacts', filteredContacts);
   };
 
