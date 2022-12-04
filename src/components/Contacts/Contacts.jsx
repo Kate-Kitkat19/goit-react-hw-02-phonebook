@@ -19,5 +19,8 @@ export const Contacts = ({ contacts }) => {
 };
 
 Contacts.propTypes = {
-  arr: PropTypes.array,
+  arr: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }),)
 };
