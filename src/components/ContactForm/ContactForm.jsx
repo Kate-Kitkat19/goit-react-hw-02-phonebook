@@ -1,38 +1,50 @@
-import { Formik, Form, Field } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 import React, { Component } from 'react';
-import * as Yup from 'yup';
+import { PropTypes } from 'prop-types';
+import { nanoid } from 'nanoid';
+import { TiUser, TiPhone } from 'react-icons/ti';
+import { Button } from './ContactForm.styled';
+import { StyledForm, FormInput } from './ContactForm.styled';
+import { ValidationSchema } from './Validation';
 
 export class ContactForm extends Component {
-  initialValues = {
+  static propTypes = {
+    saveContact: PropTypes.func.isRequired,
+  };
+
+  INITIAL_VALUES = {
     name: '',
     number: '',
   };
 
-  validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
-    number: Yup.string()
-      .min(2, 'Too Short!')
-      .max(20, 'Too Long!')
-      .required('Required'),
-  });
+  handleSubmit = (values, { resetForm }) => {
+    console.log('values in handle Submit', values);
+    this.props.saveContact({ ...values, id: nanoid() });
+    resetForm();
+  };
+
   render() {
     return (
       <Formik
-        initialValues={this.initialValues}
-        onSubmit={(values, actions) => {
-          console.log(values);
-          console.log(typeof values.number);
-        }}
-        validationSchema={this.validationSchema}
+        onSubmit={this.handleSubmit}
+        validationSchema={ValidationSchema}
+        initialValues={{ ...this.INITIAL_VALUES }}
       >
-        <Form>
-          <Field type="text" name="name" required></Field>
-          <Field type="tel" name="number"></Field>
-          <button type="submit">Submit</button>
-        </Form>
+        <StyledForm>
+          <label>
+            Please write the name
+            <TiUser></TiUser>
+            <FormInput type="text" name="name"></FormInput>
+            <ErrorMessage name="name"></ErrorMessage>
+          </label>
+          <label>
+            Please write the phone number
+            <TiPhone></TiPhone>
+            <FormInput type="tel" name="number"></FormInput>
+            <ErrorMessage name="number"></ErrorMessage>
+          </label>
+          <Button type="submit">Add contact</Button>
+        </StyledForm>
       </Formik>
     );
   }
