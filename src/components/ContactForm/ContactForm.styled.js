@@ -15,14 +15,14 @@ export const StyledForm = styled(Form)`
 `;
 
 export const Label = styled.label`
-  margin: 0 auto;
+  margin: 10px auto;
   min-width: 20px;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   position: relative;
   font-size: 18px;
   font-family: 'Roboto Serif', serif;
@@ -37,7 +37,6 @@ export const FormInput = styled(Field)`
   border: none;
   border: 1px solid #dad2bc;
   height: 50px;
-  margin: 10px;
   max-width: 400px;
   @media screen and (min-width: 1200px) {
     max-width: 600px;
@@ -91,3 +90,9 @@ export const Button = styled.button`
   }
 `;
 
+export const ErrorText = styled.p`
+  font-size: 18px;
+  color: #f95738;
+  text-transform: uppercase;
+  margin: 0;
+`;
