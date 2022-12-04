@@ -3,6 +3,7 @@ import ContactForm from './ContactForm/ContactForm';
 import { Layout } from './Layout.styled';
 import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
+import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
@@ -22,30 +23,54 @@ export class App extends Component {
     });
   };
 
+  handleSubmit = (values, { resetForm }) => {
+    console.log('values in handle Submit', values);
+    const contactName = values.name.toLowerCase();
+    const isSaved = this.state.contacts.find(
+      contact => contact.name.toLowerCase() === contactName
+    );
+    console.log('App   isSaved', isSaved);
+    if (isSaved) {
+      alert(`${values.name} is already in contacts`);
+    } else {
+      this.saveContactInState({ ...values, id: nanoid() });
+    }
+    resetForm();
+  };
+
   filterContacts = evt => {
     const value = evt.target.value;
-    console.log('App   value', value);
     this.setState({ filter: value.trim().toLowerCase() });
-    const filteredContacts = this.state.contacts.filter(contact => {
-      const normalizedName = contact.name.toLowerCase();
-      const filter = normalizedName.includes(this.state.filter);
-      return filter;
-    });
-    console.log('App   filteredContacts', filteredContacts);
+  };
+
+  deleteContact = id => {
+    console.log(id);
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
   };
 
   render() {
+    const filteredContacts = this.state.contacts.filter(contact =>
+      contact.name.toLowerCase().includes(this.state.filter)
+    );
+
     return (
       <Layout>
-        <ContactForm saveContact={this.saveContactInState}></ContactForm>
+        <ContactForm onSubmit={this.handleSubmit}></ContactForm>
         <Filter
-          filterFnc={this.filterContacts}
+          onFilterChange={this.filterContacts}
           filterValue={this.state.filter}
         ></Filter>
-        {this.state.contacts.length > 0 ? (
-          <Contacts contacts={this.state.contacts}></Contacts>
-        ) : (
-          'There are no contacts yet! Try to add some :)'
+
+        {filteredContacts.length > 0 && (
+          <>
+            <h2>Contacts</h2>
+            <Contacts
+              contacts={filteredContacts}
+              onDelete={this.deleteContact}
+            ></Contacts>
+          </>
         )}
       </Layout>
     );

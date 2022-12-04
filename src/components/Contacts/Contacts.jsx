@@ -1,26 +1,32 @@
 import { PropTypes } from 'prop-types';
-import { nanoid } from 'nanoid';
+import { ContactCard } from '../ContactCard/ContactCard';
 
-export const Contacts = ({ contacts }) => {
-  console.log(contacts);
+export const Contacts = ({ contacts, onDelete }) => {
   return (
-    <section>
-      <h2>Contacts</h2>
-      <ul>
-        {contacts.map(({ name, number }) => (
-          <li key={nanoid()}>
-            {name}
-            {number}
+    <ul>
+      {contacts.map(({ name, number, id }) => {
+        return (
+          <li key={id}>
+            <ContactCard
+              name={name}
+              number={number}
+              id={id}
+              onDelete={onDelete}
+            />
           </li>
-        ))}
-      </ul>
-    </section>
+        );
+      })}
+    </ul>
   );
 };
 
 Contacts.propTypes = {
-  arr: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    number: PropTypes.string.isRequired,
-  }),)
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    })
+  ),
+  onDelete: PropTypes.func.isRequired,
 };
