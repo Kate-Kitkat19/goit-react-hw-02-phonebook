@@ -4,6 +4,7 @@ import { Layout } from './Layout.styled';
 import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
 import { nanoid } from 'nanoid';
+import { Title } from './Contacts/Contacts.styled';
 
 export class App extends Component {
   state = {
@@ -17,19 +18,16 @@ export class App extends Component {
   };
 
   saveContactInState = data => {
-    this.setState(prevState => {
-      const { contacts } = prevState;
+    this.setState(({ contacts }) => {
       return { contacts: [...contacts, data] };
     });
   };
 
   handleSubmit = (values, { resetForm }) => {
-    console.log('values in handle Submit', values);
     const contactName = values.name.toLowerCase();
     const isSaved = this.state.contacts.find(
       contact => contact.name.toLowerCase() === contactName
     );
-    console.log('App   isSaved', isSaved);
     if (isSaved) {
       alert(`${values.name} is already in contacts`);
     } else {
@@ -44,7 +42,6 @@ export class App extends Component {
   };
 
   deleteContact = id => {
-    console.log(id);
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
@@ -65,7 +62,7 @@ export class App extends Component {
 
         {filteredContacts.length > 0 && (
           <>
-            <h2>Contacts</h2>
+            <Title>Contacts</Title>
             <Contacts
               contacts={filteredContacts}
               onDelete={this.deleteContact}

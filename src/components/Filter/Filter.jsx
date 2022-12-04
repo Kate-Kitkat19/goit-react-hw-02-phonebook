@@ -1,22 +1,21 @@
-import { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { StyledFilter, StyledLabel } from './Filter.styled';
 
-export class Filter extends Component {
-  static propTypes = {
-    onFilterChange: PropTypes.func.isRequired,
-    filterValue: PropTypes.string.isRequired,
-  };
+export const Filter = ({ onFilterChange, filterValue }) => {
+  return (
+    <StyledLabel>
+      Find contact by name
+      <StyledFilter
+        type="text"
+        name="filter"
+        onChange={onFilterChange}
+        value={filterValue}
+      ></StyledFilter>
+    </StyledLabel>
+  );
+};
 
-  render() {
-    return (
-      <>
-        <input
-          type="text"
-          name="filter"
-          onChange={this.props.onFilterChange}
-          value={this.props.filterValue}
-        ></input>
-      </>
-    );
-  }
-}
+Filter.propTypes = {
+  onFilterChange: PropTypes.func.isRequired,
+  filterValue: PropTypes.string.isRequired,
+};
