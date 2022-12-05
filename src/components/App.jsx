@@ -5,6 +5,7 @@ import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
 import { nanoid } from 'nanoid';
 import { Title } from './Contacts/Contacts.styled';
+import { localStore } from './local-storage';
 
 export class App extends Component {
   state = {
@@ -46,6 +47,22 @@ export class App extends Component {
       contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
   };
+
+  KEY = 'savedContacts';
+  componentDidMount() {
+    const savedContacts = localStore.load(this.KEY);
+    console.log(savedContacts, 'savedContacts in DidMount');
+    if (savedContacts) {
+      this.setState({ contacts: savedContacts });
+      console.log(this.state, 'this.state in DidMount');
+    }
+  }
+
+  componentDidUpdate(pervProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStore.save(this.KEY, this.state.contacts);
+    }
+  }
 
   render() {
     const filteredContacts = this.state.contacts.filter(contact =>
